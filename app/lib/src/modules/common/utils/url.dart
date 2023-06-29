@@ -1,3 +1,3 @@
 const localhost = '127.0.0.1';
 
-const signupUrl = 'http://$localhost:PORT/Address';
+const signupUrl = 'http://$localhost:7000/auth/signup';
