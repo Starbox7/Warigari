@@ -1,4 +1,5 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, Query } from '@nestjs/common';
+import { sendAuthenticationMail } from 'src/common/utils/mail';
 import { AuthService } from 'src/modules/auth/auth.service';
 import { SignupFormDTO } from 'src/modules/auth/dtos/signup-form.dto';
 
@@ -14,7 +15,9 @@ export class AuthController {
   ): Promise<void> {
     await this.authService.isConflict(form);
     await this.authService.signup(form);
-    // 이메일 보내기
+    await sendAuthenticationMail(form.email)
+      .then((response) => {})
+      .catch((error) => {});
   }
 
   @HttpCode(HttpStatus.OK)
