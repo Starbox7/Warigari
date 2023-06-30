@@ -1,5 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Query } from '@nestjs/common';
-import { sendAuthenticationMail } from 'src/common/utils/mail';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Query, Redirect } from '@nestjs/common';
 import { AuthService } from 'src/modules/auth/auth.service';
 import { SignupFormDTO } from 'src/modules/auth/dtos/signup-form.dto';
 
@@ -15,13 +14,12 @@ export class AuthController {
   ): Promise<void> {
     await this.authService.isConflict(form);
     await this.authService.signup(form);
-    await sendAuthenticationMail(form.email)
-      .then((response) => {})
-      .catch((error) => {});
+    await this.authService.sendAuthenticationMail(form);
   }
 
   @HttpCode(HttpStatus.OK)
   @Get('signup')
+  @Redirect('/views/auth-finish')
   public async changeAuthState(@Query('email') email: string): Promise<void> {
     await this.authService.findUserByEmail(email);
     await this.authService.changeAuthByEmail(email);

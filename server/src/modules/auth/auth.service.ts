@@ -2,6 +2,8 @@ import { ConflictException, Inject, Injectable } from '@nestjs/common';
 import { genSalt, hash } from 'bcrypt';
 import { PrismaService } from 'src/common/config/prisma.service';
 import { UserAuthState, UserState } from 'src/common/enums/user-enum';
+import { authMailTemplate } from 'src/common/utils/auth-mail-template';
+import { sendMail } from 'src/common/utils/mail';
 import { SignupFormDTO } from 'src/modules/auth/dtos/signup-form.dto';
 
 @Injectable()
@@ -30,6 +32,18 @@ export class AuthService {
         auth: UserAuthState.notVerify,
       },
     });
+  }
+
+  public async sendAuthenticationMail({
+    nickname,
+    email,
+    ...others
+  }: SignupFormDTO): Promise<void> {
+    return await sendMail(
+      email,
+      `[와리가리] 회원가입 인증 요청`,
+      authMailTemplate(nickname, email),
+    );
   }
 
   public async findUserByEmail(email: string): Promise<void> {
