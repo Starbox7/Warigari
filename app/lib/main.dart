@@ -1,3 +1,4 @@
+import 'package:app/src/navigation/navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -11,25 +12,10 @@ void main() {
     // 앱 전체적으로 "ProviderScope" 위젯을 감싸줘야 합니다.
     // 여기에 프로바이더의 상태가 저장됩니다.
     ProviderScope(
-      child: MyApp(),
+      child: Navigation(),
     ),
   );
 }
 
 // Note: MyApp은 hooks_riverpod의 HookConsumerWidget을 상속받습니다.
-class MyApp extends HookConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final String value = ref.watch(helloWorldProvider);
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(title: const Text('Example')),
-        body: Center(
-          child: Text(value),
-        ),
-      ),
-    );
-  }
-}
