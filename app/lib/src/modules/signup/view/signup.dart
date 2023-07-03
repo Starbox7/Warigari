@@ -1,3 +1,4 @@
+import 'package:app/src/modules/common/widgets/header.dart';
 import 'package:flutter/material.dart';
 
 class Signup extends StatelessWidget {
@@ -8,12 +9,12 @@ class Signup extends StatelessWidget {
     double fontSize = MediaQuery.of(context).size.width * 0.05;
 
     return Scaffold(
+      appBar: Header(context: context),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(20.0),
           child: Column(
             children: [
-              SizedBox(height: 10),
               Image.asset(
                 'assets/images/WarigariIcon.png',
                 width: 28,
