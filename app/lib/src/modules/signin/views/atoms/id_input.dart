@@ -1,3 +1,4 @@
+import 'package:app/main.dart';
 import 'package:app/src/modules/common/styles/size.dart';
 import 'package:app/src/modules/common/widgets/input.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ class IdInput extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final signinNotifier = ref.watch(signinProvider.notifier);
     Color grey = Theme.of(context).colorScheme.shadow;
     return Container(
       width: vw(context, 70),
@@ -20,7 +22,7 @@ class IdInput extends HookConsumerWidget {
         hint: '아이디',
         init: '',
         obscureText: false,
-        onChangeText: (value) {},
+        onChangeText: (id) => signinNotifier.setId(id),
       ),
     );
   }
