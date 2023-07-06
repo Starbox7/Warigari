@@ -1,5 +1,5 @@
 import 'package:app/src/modules/signin/views/ui/signin.dart';
-import 'package:app/src/modules/signup/view/signup.dart';
+import 'package:app/src/modules/signup/views/ui/signup.dart';
 import 'package:flutter/material.dart';
 
 String initialRoute = '/signin';

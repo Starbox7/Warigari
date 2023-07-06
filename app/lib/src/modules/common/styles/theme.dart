@@ -9,4 +9,5 @@ ThemeData themeData = theme.copyWith(
     shadow: const Color.fromRGBO(0xDF, 0xDF, 0xDF, 0.3),
     error: Colors.red,
   ),
+  scaffoldBackgroundColor: Colors.white,
 );
