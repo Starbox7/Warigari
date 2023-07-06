@@ -1,26 +1,26 @@
 import 'package:app/src/modules/common/styles/size.dart';
-import 'package:app/src/modules/signin/views/atoms/signin_title.dart';
-import 'package:app/src/modules/signin/views/blocks/nav_list.dart';
-import 'package:app/src/modules/signin/views/blocks/signin_form.dart';
+import 'package:app/src/modules/common/widgets/header.dart';
+import 'package:app/src/modules/signup/views/atoms/signup_title.dart';
+import 'package:app/src/modules/signup/views/blocks/signup_form.dart';
 import 'package:flutter/material.dart';
 
-class Signin extends StatelessWidget {
-  const Signin({super.key});
+class Signup extends StatelessWidget {
+  const Signup({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: Header(context: context),
       body: Center(
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SigninTitle(),
+              const SignupTitle(),
               SizedBox(height: rem(1)),
-              const SigninForm(),
-              SizedBox(height: rem(1)),
-              const NavList(),
+              const SignupForm(),
             ],
           ),
         ),

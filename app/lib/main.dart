@@ -1,12 +1,17 @@
 import 'package:app/src/modules/common/styles/theme.dart';
 import 'package:app/src/modules/signin/models/signin_model.dart';
 import 'package:app/src/modules/signin/viewmodels/signin_viewmodel.dart';
+import 'package:app/src/modules/signup/models/signup_model.dart';
+import 'package:app/src/modules/signup/viewmodels/signup_viewmodel.dart';
 import 'package:app/src/navigation/navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final signinProvider = StateNotifierProvider<SigninViewModel, SigninModel>(
     (ref) => SigninViewModel());
+
+final signupProvider = StateNotifierProvider<SignupViewModel, SignupModel>(
+    (ref) => SignupViewModel());
 
 void main() => runApp(
       const ProviderScope(
