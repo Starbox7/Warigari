@@ -1,24 +1,29 @@
-import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { IToken } from 'src/@types/token/tokens.interface';
 
 export class Token {
-  private readonly JwtService: JwtService;
-  private readonly configService: ConfigService;
-
-  constructor(private jwtService: JwtService) {}
+  private readonly accessService: JwtService;
+  private readonly refreshService: JwtService;
+  constructor() {
+    this.accessService = new JwtService({
+      secret: process.env.JWT_ACCESS_KEY,
+      signOptions: {
+        expiresIn: '60s',
+      },
+    });
+    this.refreshService = new JwtService({
+      secret: process.env.JWT_REFRESH_KEY,
+      signOptions: {
+        expiresIn: '5m',
+      },
+    });
+  }
 
   public async createAllToken(user): Promise<IToken> {
-    console.log(user.idx);
-    console.log(process.env.JWT_ACCESS_KEY);
-    const accessPayload = { idx: user.idx };
-    const accessToken = await this.jwtService.signAsync(accessPayload, {
-      expiresIn: '5m',
-    });
-    const refreshPayload = { idx: user.idx };
-    const refreshToken = await this.jwtService.signAsync(refreshPayload, {
-      expiresIn: '7d',
-    });
+    const accessPayload = { sub: user.id, nickname: user.nickname };
+    const accessToken = await this.accessService.signAsync(accessPayload);
+    const refreshPayload = { sub: user.id, nickname: user.nickname };
+    const refreshToken = await this.refreshService.signAsync(refreshPayload);
 
     return { accessToken, refreshToken };
   }

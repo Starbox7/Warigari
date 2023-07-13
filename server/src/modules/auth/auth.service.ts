@@ -12,12 +12,16 @@ import { authMailTemplate } from 'src/common/utils/auth-mail-template';
 import { sendMail } from 'src/common/utils/mail';
 import { SignupFormDTO } from 'src/modules/auth/dtos/signup-form.dto';
 import { SigninFormDTO } from './dtos/signin-form.dto';
-// import { IUser } from 'src/@types/db/user.interface';
 import { User } from '@prisma/client';
+import { IToken } from 'src/@types/token/tokens.interface';
+import { Token } from 'src/common/utils/token';
 
 @Injectable()
 export class AuthService {
-  public constructor(@Inject(PrismaService) private readonly prismaService: PrismaService) {}
+  public constructor(
+    @Inject(PrismaService) private readonly prismaService: PrismaService,
+    private readonly token: Token,
+  ) {}
 
   public async isConflict({ id, ...others }: SignupFormDTO): Promise<void> {
     await this.prismaService.user
@@ -31,7 +35,7 @@ export class AuthService {
       });
   }
 
-  public async findUserById({ id, ...others }: SigninFormDTO): Promise<User> {
+  public async findUserById({ id, ...others }: SigninFormDTO): Promise<User | undefined> {
     return await this.prismaService.user
       .findUnique({
         where: { id: id },
@@ -42,18 +46,8 @@ export class AuthService {
   }
 
   public async isValid(user, form): Promise<void> {
-    // if(form.id != user.id){}
-    // console.log(user.password);
-    // console.log(form.password);
-    // const hashed: string = await genSalt(10).then((salt: string) => hash(form.password, salt));
-    // const salt = await genSalt(10);
-    // const hashed = await hash(form.password, salt);
-    // console.log(hashed);
-    // if (hashed != user.password) {
-    //   throw new UnauthorizedException();
-    // }
     const isMatch = await compare(form.password, user.password);
-    // console.log(isMatch);
+
     if (!isMatch) {
       throw new UnauthorizedException();
     }
@@ -62,18 +56,6 @@ export class AuthService {
       throw new BadRequestException();
     }
   }
-
-  // public async isAuth({ id, ...others }: SigninFormDTO): Promise<number> {
-  //   const user = await this.prismaService.user.findUnique({
-  //     where: { id: id },
-  //   });
-
-  //   if (!user) {
-  //     throw new BadRequestException();
-  //   }
-
-  //   return user.auth;
-  // }
 
   public async signup({ password, ...others }: SignupFormDTO): Promise<void> {
     const hashed: string = await genSalt(10).then((salt: string) => hash(password, salt));
@@ -86,6 +68,10 @@ export class AuthService {
         auth: UserAuthState.notVerify,
       },
     });
+  }
+
+  public async singin(user): Promise<IToken> {
+    return await this.token.createAllToken(user);
   }
 
   public async sendAuthenticationMail({
