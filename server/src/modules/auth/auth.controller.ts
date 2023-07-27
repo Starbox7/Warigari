@@ -36,6 +36,6 @@ export class AuthController {
     const user = await this.authService.findUserById(form);
     await this.authService.isValid(user, form);
 
-    return this.authService.singin(user);
+    return this.authService.signin(user.idx);
   }
 }

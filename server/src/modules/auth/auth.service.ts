@@ -35,7 +35,7 @@ export class AuthService {
       });
   }
 
-  public async findUserById({ id, ...others }: SigninFormDTO): Promise<User | undefined> {
+  public async findUserById({ id, ...others }: SigninFormDTO): Promise<User> {
     return await this.prismaService.user
       .findUnique({
         where: { id: id },
@@ -70,8 +70,8 @@ export class AuthService {
     });
   }
 
-  public async singin(user): Promise<IToken> {
-    return await this.token.createAllToken(user);
+  public async signin(idx): Promise<IToken> {
+    return await this.token.createAllToken(idx);
   }
 
   public async sendAuthenticationMail({
