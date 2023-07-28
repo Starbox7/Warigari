@@ -21,3 +21,13 @@ model User {
   statusMessage String?  @db.VarChar(255)
   auth          Int      //@db.check([auth] in [0, 1])
 }
+
+model Friend {
+  idx        Int      @id @default(autoincrement())
+  send       String
+  receive    String
+  friend     Int      //@check(in: [0, 1])
+  block      Int      //@check(in: [0, 1, 2])
+  sendMemo   String?
+  receiveMemo String?
+}

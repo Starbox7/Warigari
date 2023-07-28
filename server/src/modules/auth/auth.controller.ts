@@ -2,7 +2,7 @@ import { Body, Controller, Get, HttpCode, HttpStatus, Post, Query, Redirect } fr
 import { AuthService } from 'src/modules/auth/auth.service';
 import { SignupFormDTO } from 'src/modules/auth/dtos/signup-form.dto';
 import { SigninFormDTO } from './dtos/signin-form.dto';
-import { IToken } from 'src/@types/token/tokens.interface';
+import { ISignin } from 'src/@types/auth/auth.interface';
 
 @Controller('auth')
 export class AuthController {
@@ -32,10 +32,18 @@ export class AuthController {
   public async signin(
     @Body()
     form: SigninFormDTO,
-  ): Promise<IToken> {
+  ): Promise<ISignin> {
     const user = await this.authService.findUserById(form);
     await this.authService.isValid(user, form);
+    const tokens = this.authService.signin(user.idx);
 
-    return this.authService.signin(user.idx);
+    return {
+      accessToken: (await tokens).accessToken,
+      refreshToken: (await tokens).refreshToken,
+      nickname: user.nickname,
+      status: user.status,
+      profile: user.profile,
+      statusMessage: user.statusMessage,
+    };
   }
 }

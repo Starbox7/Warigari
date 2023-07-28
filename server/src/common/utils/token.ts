@@ -13,13 +13,13 @@ export class Token {
     this.accessService = new JwtService({
       secret: this.configService.get('JWT_ACCESS_KEY'),
       signOptions: {
-        expiresIn: '60s',
+        expiresIn: '5m',
       },
     });
     this.refreshService = new JwtService({
       secret: this.configService.get('JWT_REFRESH_KEY'),
       signOptions: {
-        expiresIn: '5m',
+        expiresIn: '15d',
       },
     });
   }

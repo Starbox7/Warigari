@@ -59,7 +59,6 @@ export class AuthService {
 
   public async signup({ password, ...others }: SignupFormDTO): Promise<void> {
     const hashed: string = await genSalt(10).then((salt: string) => hash(password, salt));
-    console.log(hashed);
     await this.prismaService.user.create({
       data: {
         ...others,
