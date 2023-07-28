@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/common/config/prisma.service';
 import { FriendFormDTO } from './dtos/friend-form.dto';
 import { Friend, User } from '@prisma/client';
+import { async } from 'rxjs';
 
 @Injectable()
 export class FriendService {
@@ -36,7 +37,7 @@ export class FriendService {
       },
     });
   }
-  public async findAllFriendRequest(id): Promise<Friend[]> {
+  public async findAllFriendRequest(id): Promise<Array<Friend>> {
     return await this.prismaService.friend.findMany({
       where: {
         receive: id,
@@ -63,7 +64,24 @@ export class FriendService {
     });
   }
 
-  //   public async findAllOnlineFriend() {}
+  public async findAllFriend(id): Promise<any> {
+    const friend = await this.prismaService.friend.findMany({
+      where: {
+        OR: [
+          { send: id, friend: 1 },
+          { receive: id, friend: 1 },
+        ],
+      },
+    });
+    const friendList = friend.map((friend) => (friend.send == id ? friend.receive : friend.send));
+    return friendList.map(
+      async (friendList) =>
+        await this.prismaService.user.findUnique({
+          where: { id: friendList },
+        }),
+    );
+  }
+
   //   public async findAllOfflineFriend() {}
   //   public async findAllBlockFriend() {}
 }

@@ -50,4 +50,14 @@ export class FriendController {
   public async accept(@Param() params: any): Promise<void> {
     await this.friendService.acceptFriendRequest(params.idx);
   }
+
+  @HttpCode(HttpStatus.OK)
+  @Get()
+  public async findAllFriend(
+    @Body()
+    form: FriendFormDTO,
+  ): Promise<any> {
+    const user = await this.friendService.findUserByIdx(form.idx);
+    return await this.friendService.findAllFriend(user.id);
+  }
 }
